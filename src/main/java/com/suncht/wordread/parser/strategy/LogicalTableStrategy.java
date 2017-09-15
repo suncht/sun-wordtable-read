@@ -6,7 +6,7 @@ import com.suncht.wordread.model.WordTableCell;
 import com.suncht.wordread.model.WordTableComplexCell;
 import com.suncht.wordread.model.WordTableRow;
 import com.suncht.wordread.model.WordTableSimpleCell;
-import com.suncht.wordread.parser.WordTableMemoryMapping;
+import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
 
 public class LogicalTableStrategy implements ITableTransferStrategy {
 

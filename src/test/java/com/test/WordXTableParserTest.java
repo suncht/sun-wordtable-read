@@ -19,7 +19,7 @@ public class WordXTableParserTest {
 	public void test01() {
 		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/1.docx");
 		//InputStream inputStream = new FileInputStream(new File(doc2));
-		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).parse(inputStream, WordDocType.DOCX);
+		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).memoryMappingVisitor(new MemoryMappingVisitorTest()).parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
 			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
 		}

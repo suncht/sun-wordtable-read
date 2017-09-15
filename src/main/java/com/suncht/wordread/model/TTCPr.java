@@ -2,6 +2,8 @@ package com.suncht.wordread.model;
 
 import java.io.Serializable;
 
+import com.suncht.wordread.parser.mapping.IWordTableMemoryMappingVisitor;
+
 /**
  * word的单元格
  * @author changtan.sun
@@ -167,6 +169,10 @@ public class TTCPr implements Serializable, Cloneable {
 			return "TTCPr [text=" + text + ", root=" + root + ", parent=" + parent + "]";
 		}
 		return "TTCPr [text=" + text + "]";
+	}
+
+	public void accept(IWordTableMemoryMappingVisitor visitor, int realRowIndex, int realColumnIndex) {
+		visitor.visit(this, realRowIndex, realColumnIndex);
 	}
 
 	public static enum TTCPrEnum {
