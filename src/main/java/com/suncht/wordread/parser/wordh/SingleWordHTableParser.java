@@ -5,8 +5,8 @@ import org.apache.poi.hwpf.usermodel.TableRow;
 
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.ISingleWordTableParser;
-import com.suncht.wordread.parser.WordTableMemoryMapping;
 import com.suncht.wordread.parser.WordTableTransferContext;
+import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
 
 public class SingleWordHTableParser implements ISingleWordTableParser {
 	private Table hwpfTable;

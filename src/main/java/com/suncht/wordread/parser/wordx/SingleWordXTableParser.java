@@ -11,8 +11,8 @@ import com.suncht.wordread.model.TTCPr;
 import com.suncht.wordread.model.TTCPr.TTCPrEnum;
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.ISingleWordTableParser;
-import com.suncht.wordread.parser.WordTableMemoryMapping;
 import com.suncht.wordread.parser.WordTableTransferContext;
+import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
 
 /**
  * 解析Docx中一张复杂表格内容
@@ -59,7 +59,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 		//table.setRealMaxColumnCount(columnCount);
 
 		_tableMemoryMapping = new WordTableMemoryMapping(realMaxRowCount, realMaxColumnCount);
-
+		_tableMemoryMapping.setVisitor(context.getVisitor());
 		for (int i = 0; i < realMaxRowCount; i++) {
 			parseRow(rows.get(i), i);
 		}

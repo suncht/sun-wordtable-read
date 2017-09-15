@@ -1,7 +1,7 @@
 package com.suncht.wordread.parser.strategy;
 
 import com.suncht.wordread.model.WordTable;
-import com.suncht.wordread.parser.WordTableMemoryMapping;
+import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
 
 /**
  * 表格转换策略

@@ -8,8 +8,8 @@ import java.util.List;
 import org.springframework.util.StringUtils;
 
 import com.suncht.wordread.model.WordTable;
+import com.suncht.wordread.parser.mapping.IWordTableMemoryMappingVisitor;
 import com.suncht.wordread.parser.strategy.ITableTransferStrategy;
-import com.suncht.wordread.parser.strategy.LogicalTableStrategy;
 import com.suncht.wordread.parser.wordh.WordHTableParser;
 import com.suncht.wordread.parser.wordx.WordXTableParser;
 
@@ -27,7 +27,7 @@ public class WordTableParser {
 	private IWordTableParser wordTableParser;
 
 	private WordTableParser() {
-
+		this.context = WordTableTransferContext.create();
 	}
 
 	public static WordTableParser create() {
@@ -35,14 +35,16 @@ public class WordTableParser {
 	}
 
 	public WordTableParser transferStrategy(ITableTransferStrategy tableTransferStrategy) {
-		this.context = new WordTableTransferContext(tableTransferStrategy);
+		context.transferStrategy(tableTransferStrategy);
+		return this;
+	}
+
+	public WordTableParser memoryMappingVisitor(IWordTableMemoryMappingVisitor visitor) {
+		context.visitor(visitor);
 		return this;
 	}
 
 	public List<WordTable> parse(String wordFilePath) {
-		if (this.context == null) {
-			this.context = new WordTableTransferContext(new LogicalTableStrategy());
-		}
 		WordDocType docType = WordDocType.DOCX;
 		if (StringUtils.endsWithIgnoreCase(wordFilePath, DOCX_WORD_DOCUMENT)) {
 			docType = WordDocType.DOCX;
@@ -62,10 +64,6 @@ public class WordTableParser {
 	}
 
 	public List<WordTable> parse(InputStream inputStream, WordDocType docType) {
-		if (this.context == null) {
-			this.context = new WordTableTransferContext(new LogicalTableStrategy());
-		}
-
 		if (docType == WordDocType.DOCX) {
 			wordTableParser = new WordXTableParser(this.context);
 		} else if (docType == WordDocType.DOC) {
