@@ -134,7 +134,7 @@ public class LogicalTableStrategy implements ITableTransferStrategy {
 							WordTableCell _cell = new WordTableSimpleCell();
 							_cell.setRowSpan(_ttcpr.getRowSpan());
 							_cell.setColumnSpan(_ttcpr.getColSpan());
-							_cell.setText(_ttcpr.getText());
+							_cell.setContent(_ttcpr.getContent().copy());
 							innerRow.getCells().add(_cell);
 
 							if (_ttcpr.getRowSpan() > _rowSpan) {
@@ -154,7 +154,7 @@ public class LogicalTableStrategy implements ITableTransferStrategy {
 				WordTableSimpleCell pwtc = new WordTableSimpleCell(); //属于简单单元格
 				pwtc.setRowSpan(currentRealCell.getRowSpan());
 				pwtc.setColumnSpan(currentRealCell.getColSpan());
-				pwtc.setText(currentRealCell.getText());
+				pwtc.setContent(currentRealCell.getContent().copy());
 
 				cell = pwtc;
 			}

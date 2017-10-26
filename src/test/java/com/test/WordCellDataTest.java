@@ -11,12 +11,11 @@ import com.suncht.wordread.parser.WordTableParser;
 import com.suncht.wordread.parser.WordTableParser.WordDocType;
 import com.suncht.wordread.parser.strategy.LogicalTableStrategy;
 
-public class WordHTableParserTest {
+public class WordCellDataTest {
 	@Test
-	public void test01() {
-		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/1.doc");
-		//InputStream inputStream = new FileInputStream(new File(doc2));
-		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).parse(inputStream, WordDocType.DOC);
+	public void testFormulaInCell() {
+		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/3.docx");
+		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).memoryMappingVisitor(new MemoryMappingVisitorTest()).parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
 			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
 		}

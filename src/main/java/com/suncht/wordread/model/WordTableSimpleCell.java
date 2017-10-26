@@ -4,7 +4,7 @@ public class WordTableSimpleCell extends WordTableCell {
 
 	@Override
 	public String toString() {
-		return getText();
+		return getContent().getText();
 	}
 
 }

@@ -10,7 +10,7 @@ import com.suncht.wordread.model.WordTableSimpleCell;
 public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 	public String format(WordTableCell tableCell) {
 		if (tableCell instanceof WordTableSimpleCell) {
-			return tableCell.getText() + '\t';
+			return tableCell.getContent().getText() + '\t';
 		} else if (tableCell instanceof WordTableComplexCell) {
 			WordTableComplexCell cell = (WordTableComplexCell) tableCell;
 

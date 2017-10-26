@@ -8,7 +8,7 @@ public class MemoryMappingVisitorTest implements IWordTableMemoryMappingVisitor 
 	@Override
 	public void visit(final TTCPr cell, int realRowIndex, int realColumnIndex) {
 		if (realRowIndex == 0 && realColumnIndex == 0) {
-			cell.setText("测试成功");
+			//cell.getContent()("测试成功");
 		}
 	}
 

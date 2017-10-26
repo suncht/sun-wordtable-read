@@ -10,6 +10,7 @@ import org.openxmlformats.schemas.wordprocessingml.x2006.main.CTTcPr;
 import com.suncht.wordread.model.TTCPr;
 import com.suncht.wordread.model.TTCPr.TTCPrEnum;
 import com.suncht.wordread.model.WordTable;
+import com.suncht.wordread.model.WordTableCellContent;
 import com.suncht.wordread.parser.ISingleWordTableParser;
 import com.suncht.wordread.parser.WordTableTransferContext;
 import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
@@ -124,7 +125,9 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				ttc.setRealRowIndex(realRowIndex);
 				ttc.setRealColumnIndex(realColumnIndex);
 				ttc.setRoot(null);
-				ttc.setText(cell.getText());
+				//ttc.setText(cell.getText());
+				ttc.setContent(WordTableCellContent.getCellContent(cell.getCTTc().toString(), cell.getText()));
+
 				_tableMemoryMapping.setTTCPr(ttc, realRowIndex, realColumnIndex);
 			} else { //行合并的其他行单元格（被合并的单元格）
 				int _start = realRowIndex, _end = 0;
@@ -155,7 +158,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				currentCell.setType(TTCPrEnum.NONE);
 				currentCell.setRealRowIndex(realRowIndex);
 				currentCell.setRealColumnIndex(realColumnIndex);
-				currentCell.setText(cell.getText());
+				currentCell.setContent(WordTableCellContent.getCellContent(cell.getCTTc().toString(), cell.getText()));
 				currentCell.setRoot(null);
 
 				//判断是否有父单元格

@@ -38,7 +38,7 @@ public class TTCPr implements Serializable, Cloneable {
 	/**
 	 * 单元格的数据内容
 	 */
-	private String text;
+	private WordTableCellContent content;
 	/**
 	 * 合并了多少行
 	 */
@@ -132,15 +132,15 @@ public class TTCPr implements Serializable, Cloneable {
 		this.colSpan = colSpan;
 	}
 
-	public String getText() {
+	public WordTableCellContent getContent() {
 		if (root != null) {
-			return root.getText();
+			return root.getContent();
 		}
-		return text;
+		return content;
 	}
 
-	public void setText(String text) {
-		this.text = text;
+	public void setContent(WordTableCellContent content) {
+		this.content = content;
 	}
 
 	public TTCPr getRoot() {
@@ -162,13 +162,13 @@ public class TTCPr implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		if (root != null && parent == null) {
-			return "TTCPr [text=" + text + ", root=" + root + "]";
+			return "TTCPr [content=" + content.getText() + ", root=" + root + "]";
 		} else if (root == null && parent != null) {
-			return "TTCPr [text=" + text + ", parent=" + parent + "]";
+			return "TTCPr [content=" + content.getText() + ", parent=" + parent + "]";
 		} else if (root != null && parent != null) {
-			return "TTCPr [text=" + text + ", root=" + root + ", parent=" + parent + "]";
+			return "TTCPr [content=" + content.getText() + ", root=" + root + ", parent=" + parent + "]";
 		}
-		return "TTCPr [text=" + text + "]";
+		return "TTCPr [content=" + content.getText() + "]";
 	}
 
 	public void accept(IWordTableMemoryMappingVisitor visitor, int realRowIndex, int realColumnIndex) {

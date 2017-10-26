@@ -27,7 +27,7 @@ public class WordTableCell {
 	/**
 	 * 单元格的内容
 	 */
-	private String text;
+	private WordTableCellContent content;
 
 	/**
 	 * 在word中合并了多少行
@@ -58,16 +58,16 @@ public class WordTableCell {
 	//		this.realColumnIndex = realColumnIndex;
 	//	}
 
-	public String getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text = text;
-	}
-
 	public int getRowSpan() {
 		return rowSpan;
+	}
+
+	public WordTableCellContent getContent() {
+		return content;
+	}
+
+	public void setContent(WordTableCellContent content) {
+		this.content = content;
 	}
 
 	public void setRowSpan(int rowSpan) {
