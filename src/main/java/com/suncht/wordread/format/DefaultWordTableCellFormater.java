@@ -3,6 +3,7 @@ package com.suncht.wordread.format;
 import java.util.List;
 
 import com.suncht.wordread.model.WordTableCell;
+import com.suncht.wordread.model.WordTableCellContentImage.ImageContent;
 import com.suncht.wordread.model.WordTableComplexCell;
 import com.suncht.wordread.model.WordTableRow;
 import com.suncht.wordread.model.WordTableSimpleCell;
@@ -10,7 +11,7 @@ import com.suncht.wordread.model.WordTableSimpleCell;
 public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 	public String format(WordTableCell tableCell) {
 		if (tableCell instanceof WordTableSimpleCell) {
-			return tableCell.getContent().getText() + '\t';
+			return printCell(tableCell.getContent().getContent()) + '\t';
 		} else if (tableCell instanceof WordTableComplexCell) {
 			WordTableComplexCell cell = (WordTableComplexCell) tableCell;
 
@@ -18,7 +19,9 @@ public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 
 			List<WordTableRow> rows = cell.getInnerTable().getRows();
 			for (WordTableRow row : rows) {
-				builder.append(row.getCells().toString());
+				for (WordTableCell wtcell : row.getCells()) {
+					builder.append(printCell(wtcell.getContent().getContent()) + '\t');
+				}
 			}
 			return builder.toString() + "" + '\t';
 		}
@@ -26,4 +29,12 @@ public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 		return "";
 	}
 
+	private String printCell(Object cellContent) {
+		if (cellContent instanceof ImageContent) {
+			return ((ImageContent) cellContent).getFileName();
+		} else {
+			return cellContent.toString();
+		}
+
+	}
 }

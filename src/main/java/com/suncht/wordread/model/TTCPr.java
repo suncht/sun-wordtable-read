@@ -162,13 +162,13 @@ public class TTCPr implements Serializable, Cloneable {
 	@Override
 	public String toString() {
 		if (root != null && parent == null) {
-			return "TTCPr [content=" + content.getText() + ", root=" + root + "]";
+			return "TTCPr [content=" + content.getContent() + ", root=" + root + "]";
 		} else if (root == null && parent != null) {
-			return "TTCPr [content=" + content.getText() + ", parent=" + parent + "]";
+			return "TTCPr [content=" + content.getContent() + ", parent=" + parent + "]";
 		} else if (root != null && parent != null) {
-			return "TTCPr [content=" + content.getText() + ", root=" + root + ", parent=" + parent + "]";
+			return "TTCPr [content=" + content.getContent() + ", root=" + root + ", parent=" + parent + "]";
 		}
-		return "TTCPr [content=" + content.getText() + "]";
+		return "TTCPr [content=" + content.getContent() + "]";
 	}
 
 	public void accept(IWordTableMemoryMappingVisitor visitor, int realRowIndex, int realColumnIndex) {

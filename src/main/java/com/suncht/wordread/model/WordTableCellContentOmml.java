@@ -4,6 +4,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
@@ -15,20 +16,24 @@ import com.suncht.wordread.utils.MathmlUtils;
 
 public class WordTableCellContentOmml extends WordTableCellContent {
 
-	@Override
-	public String getText() {
-		String xml = this.getOxml();
+	public WordTableCellContentOmml() {
+
+	}
+
+	public WordTableCellContentOmml(XWPFTableCell cell) {
+		String xml = cell.getCTTc().xmlText();
 		String omml = this.extractOml(xml);
 
 		String mml = MathmlUtils.convertOMML2MML(omml);
 		String latex = MathmlUtils.convertMML2Latex(mml);
-		return latex;
+		this.setContent(latex);
+		this.setOxml(xml);
 	}
 
 	@Override
 	public WordTableCellContent copy() {
 		WordTableCellContent newContent = new WordTableCellContentOmml();
-		newContent.setText(this.text);
+		newContent.setContent(this.content);
 		newContent.setOxml(this.oxml);
 		return newContent;
 	}

@@ -116,7 +116,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 		}
 
 		CTTcPr tt = cell.getCTTc().getTcPr();
-
+		String a = tt.xmlText();
 		//-------行合并--------
 		if (tt.getVMerge() != null) {
 			if (tt.getVMerge().getVal() != null && "restart".equals(tt.getVMerge().getVal().toString())) { //行合并的第一行单元格(行合并的开始单元格)
@@ -126,7 +126,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				ttc.setRealColumnIndex(realColumnIndex);
 				ttc.setRoot(null);
 				//ttc.setText(cell.getText());
-				ttc.setContent(WordTableCellContent.getCellContent(cell.getCTTc().toString(), cell.getText()));
+				ttc.setContent(WordTableCellContent.getCellContent(cell));
 
 				_tableMemoryMapping.setTTCPr(ttc, realRowIndex, realColumnIndex);
 			} else { //行合并的其他行单元格（被合并的单元格）
@@ -158,7 +158,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				currentCell.setType(TTCPrEnum.NONE);
 				currentCell.setRealRowIndex(realRowIndex);
 				currentCell.setRealColumnIndex(realColumnIndex);
-				currentCell.setContent(WordTableCellContent.getCellContent(cell.getCTTc().toString(), cell.getText()));
+				currentCell.setContent(WordTableCellContent.getCellContent(cell));
 				currentCell.setRoot(null);
 
 				//判断是否有父单元格
