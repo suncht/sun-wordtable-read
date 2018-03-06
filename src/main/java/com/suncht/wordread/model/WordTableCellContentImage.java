@@ -59,8 +59,8 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		}
 		ImageContent imageContent = null;
 		for (XWPFPictureData pictureData : xdoc.getAllPictures()) {
-			PackageRelationship relationship = pictureData.getPackageRelationship();
-			if (embedId.equals(relationship.getId())) {
+			PackageRelationship relationship = pictureData.getPackagePart().getRelationship(embedId);
+			if(relationship!=null) {
 				imageContent = new ImageContent();
 				imageContent.setData(pictureData.getData());
 				imageContent.setFileName(pictureData.getFileName());

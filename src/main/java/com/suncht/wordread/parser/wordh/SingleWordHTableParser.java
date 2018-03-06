@@ -1,6 +1,9 @@
 package com.suncht.wordread.parser.wordh;
 
+import org.apache.poi.hwpf.usermodel.Paragraph;
 import org.apache.poi.hwpf.usermodel.Table;
+import org.apache.poi.hwpf.usermodel.TableCell;
+import org.apache.poi.hwpf.usermodel.TableCellDescriptor;
 import org.apache.poi.hwpf.usermodel.TableRow;
 
 import com.suncht.wordread.model.WordTable;
@@ -40,9 +43,36 @@ public class SingleWordHTableParser implements ISingleWordTableParser {
 		return context.transfer(_tableMemoryMapping);
 	}
 
-	private void parseRow(TableRow row, int i) {
-		// TODO Auto-generated method stub
+	private void parseRow(TableRow row, int realRowIndex) {
+		int numCells = row.numCells();
+		for (int i = 0; i < numCells; i++) {
+			TableCell cell = row.getCell(i);// 取得单元格
 
+			int skipColumn = parseCell(cell, realRowIndex, i);
+		}
+	}
+
+	private int parseCell(TableCell cell, int realRowIndex, int realColumnIndex) {
+		int a = cell.getStartOffset();
+		int b = cell.getEndOffset();
+		int c = cell.getLeftEdge();
+		System.out.println(a + " === " + b + " ==== " + cell.isVerticallyMerged() + " ==== " + cell.isFirstVerticallyMerged());
+		System.out.println(a + " ===> " + b + " ====> " + cell.getDescriptor().isFFirstMerged() + " ====> " + cell.getDescriptor().isFMerged());
+		System.out.println(cell.getDescriptor());
+		
+		int numParagraphs = cell.numParagraphs();
+		for (int k = 0; k < numParagraphs; k++) {
+			Paragraph para = cell.getParagraph(k);
+			System.out.println(para.getStartOffset() + " -- " + para.getEndOffset());
+			String s = para.text();
+			// 去除后面的特殊符号
+			if (null != s && !"".equals(s)) {
+				s = s.substring(0, s.length() - 1);
+			}
+			System.out.println(s);
+		}
+		System.out.println("");
+		return 0;
 	}
 
 }

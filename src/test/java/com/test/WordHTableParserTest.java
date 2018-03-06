@@ -14,7 +14,7 @@ import com.suncht.wordread.parser.strategy.LogicalTableStrategy;
 public class WordHTableParserTest {
 	@Test
 	public void test01() {
-		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/1.doc");
+		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/2.doc");
 		//InputStream inputStream = new FileInputStream(new File(doc2));
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).parse(inputStream, WordDocType.DOC);
 		for (WordTable wordTable : tables) {
