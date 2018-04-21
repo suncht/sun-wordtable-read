@@ -1,10 +1,9 @@
 package com.suncht.wordread.model;
 
-import org.apache.poi.xwpf.usermodel.XWPFTableCell;
-
-public class WordTableCellContent {
+public abstract class WordTableCellContent {
+	protected ContentTypeEnum contentType;
 	protected Object data;
-	protected String oxml;
+	
 
 	public Object getData() {
 		return data;
@@ -13,21 +12,16 @@ public class WordTableCellContent {
 	public void setData(Object data) {
 		this.data = data;
 	}
-
-	public String getOxml() {
-		return oxml;
+	
+	public ContentTypeEnum getContentType() {
+		return contentType;
 	}
 
-	protected void setOxml(String oxml) {
-		this.oxml = oxml;
+	public void setContentType(ContentTypeEnum contentType) {
+		this.contentType = contentType;
 	}
 
-	public WordTableCellContent copy() {
-		WordTableCellContent newContent = new WordTableCellContent();
-		newContent.setData(data);
-		newContent.setOxml(oxml);
-		return newContent;
-	}
+	public abstract WordTableCellContent copy();
 
 	//	public static WordTableCellContent getCellContent(String oxml, String text) {
 	//		WordTableCellContent content = null;
@@ -40,27 +34,4 @@ public class WordTableCellContent {
 	//		content.setOxml(oxml);
 	//		return content;
 	//	}
-
-	public static WordTableCellContent getCellContent(XWPFTableCell cell) {
-		WordTableCellContent content = null;
-		if (isFormula(cell)) { //是公式
-			content = new WordTableCellContentOmml(cell);
-		} else if (isImage(cell)) { //图片
-			content = new WordTableCellContentImage(cell);
-		} else { //一般文本
-			content = new WordTableCellContentText(cell);
-		}
-		return content;
-	}
-
-	public static boolean isFormula(XWPFTableCell cell) {
-		String xmlText = cell.getCTTc().xmlText();
-		return xmlText.contains("<m:oMathPara>") && xmlText.contains("</m:oMathPara>");
-	}
-
-	public static boolean isImage(XWPFTableCell cell) {
-		String xmlText = cell.getCTTc().xmlText();
-		return xmlText.contains("<w:drawing>") && xmlText.contains("</w:drawing>");
-	}
-
 }

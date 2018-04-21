@@ -1,11 +1,11 @@
 package com.suncht.wordread.model;
 
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
@@ -20,15 +20,27 @@ import org.dom4j.tree.DefaultElement;
 import org.xml.sax.InputSource;
 
 public class WordTableCellContentImage extends WordTableCellContent {
+	public WordTableCellContentImage() {
+		
+	}
+	
 	public WordTableCellContentImage(XWPFTableCell cell) {
 		String xml = cell.getCTTc().xmlText();
 		String embedId = extractEmbedId(xml);
 		this.setData(this.readImage(embedId, cell.getXWPFDocument()));
-		this.setOxml(cell.getCTTc().xmlText());
+		this.setContentType(ContentTypeEnum.Image);
+	}
+	
+	@Override
+	public WordTableCellContent copy() {
+		WordTableCellContentImage newContent = new WordTableCellContentImage();
+		newContent.setData(data);
+		newContent.setContentType(contentType);
+		return newContent;
 	}
 
 	private String extractEmbedId(String xml) {
-		//dom4j解析器的初始化
+		// dom4j解析器的初始化
 		SAXReader reader = new SAXReader(new DocumentFactory());
 		Map<String, String> map = new HashMap<String, String>();
 		map.put("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
@@ -37,7 +49,7 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		map.put("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
 		map.put("pic", "http://schemas.openxmlformats.org/drawingml/2006/picture");
 		map.put("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-		reader.getDocumentFactory().setXPathNamespaceURIs(map); //xml文档的namespace设置
+		reader.getDocumentFactory().setXPathNamespaceURIs(map); // xml文档的namespace设置
 
 		InputSource source = new InputSource(new StringReader(xml));
 		source.setEncoding("utf-8");
@@ -87,11 +99,17 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		}
 
 		public byte[] getData() {
-			return data;
+			if (data == null) {
+				return new byte[0];
+			}
+			return Arrays.copyOf(data, data.length);
 		}
 
 		public void setData(byte[] data) {
-			this.data = data;
+			if (data == null) {
+				return;
+			}
+			this.data = Arrays.copyOf(data, data.length);
 		}
 
 		public int getImageType() {
@@ -103,4 +121,5 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		}
 
 	}
+
 }

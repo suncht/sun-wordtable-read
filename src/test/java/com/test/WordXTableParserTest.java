@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.suncht.wordread.format.DefaultWordTableCellFormater;
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.WordTableParser;
 import com.suncht.wordread.parser.WordTableParser.WordDocType;
@@ -21,7 +20,7 @@ public class WordXTableParserTest {
 			List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy())
 					.memoryMappingVisitor(new MemoryMappingVisitorTest()).parse(inputStream, WordDocType.DOCX);
 			for (WordTable wordTable : tables) {
-				System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+				System.out.println(wordTable.format());
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -35,7 +34,7 @@ public class WordXTableParserTest {
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy())
 				.parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
-			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+			System.out.println(wordTable.format());
 		}
 	}
 
@@ -46,7 +45,7 @@ public class WordXTableParserTest {
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy())
 				.parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
-			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+			System.out.println(wordTable.format());
 		}
 	}
 }

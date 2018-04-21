@@ -5,7 +5,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.suncht.wordread.format.DefaultWordTableCellFormater;
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.WordTableParser;
 import com.suncht.wordread.parser.WordTableParser.WordDocType;
@@ -18,7 +17,7 @@ public class WordHTableParserTest {
 		//InputStream inputStream = new FileInputStream(new File(doc2));
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).parse(inputStream, WordDocType.DOC);
 		for (WordTable wordTable : tables) {
-			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+			System.out.println(wordTable.format());
 		}
 	}
 }

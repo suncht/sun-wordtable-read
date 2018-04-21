@@ -1,6 +1,6 @@
 package com.suncht.wordread.model;
 
-import com.suncht.wordread.format.IWordTableCellFormater;
+import com.suncht.wordread.format.IWordTableFormater;
 
 /**
  * 表格的单元格
@@ -108,12 +108,14 @@ public class WordTableCell {
 	 * @param formater
 	 * @return
 	 */
-	public String format(IWordTableCellFormater formater) {
+	public String format(IWordTableFormater formater) {
 		if (formater == null) {
 			return this.toString();
 		}
 
-		return formater.format(this);
+		StringBuilder stringBuilder = new StringBuilder();
+		formater.format(this, stringBuilder);
+		return stringBuilder.toString();
 	}
 
 }

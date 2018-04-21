@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.junit.Test;
 
-import com.suncht.wordread.format.DefaultWordTableCellFormater;
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.WordTableParser;
 import com.suncht.wordread.parser.WordTableParser.WordDocType;
@@ -18,7 +17,7 @@ public class WordCellDataTest {
 		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/嵌套公式.docx");
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).memoryMappingVisitor(new MemoryMappingVisitorTest()).parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
-			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+			System.out.println(wordTable.format());
 		}
 
 		inputStream.close();
@@ -29,7 +28,7 @@ public class WordCellDataTest {
 		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/嵌套图片.docx");
 		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy()).memoryMappingVisitor(new MemoryMappingVisitorTest()).parse(inputStream, WordDocType.DOCX);
 		for (WordTable wordTable : tables) {
-			System.out.println(wordTable.format(new DefaultWordTableCellFormater()));
+			System.out.println(wordTable.format());
 		}
 
 		inputStream.close();
