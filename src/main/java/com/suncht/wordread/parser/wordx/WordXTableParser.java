@@ -1,11 +1,13 @@
 package com.suncht.wordread.parser.wordx;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
 
+import org.apache.commons.io.IOUtils;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.common.collect.Lists;
 import com.suncht.wordread.model.WordTable;
@@ -19,6 +21,8 @@ import com.suncht.wordread.parser.WordTableTransferContext;
  *
  */
 public class WordXTableParser implements IWordTableParser {
+	private final static Logger logger = LoggerFactory.getLogger(WordXTableParser.class);
+	
 	private WordTableTransferContext context;
 
 	public WordXTableParser(WordTableTransferContext context) {
@@ -39,15 +43,9 @@ public class WordXTableParser implements IWordTableParser {
 				wordTables.add(wordTable);
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		} finally {
-			if (inputStream != null) {
-				try {
-					inputStream.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
+			IOUtils.closeQuietly(inputStream);
 		}
 
 		return wordTables;

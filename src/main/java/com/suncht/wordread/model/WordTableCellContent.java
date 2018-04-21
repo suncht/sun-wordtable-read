@@ -3,15 +3,15 @@ package com.suncht.wordread.model;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 
 public class WordTableCellContent {
-	protected Object content;
+	protected Object data;
 	protected String oxml;
 
-	public Object getContent() {
-		return content;
+	public Object getData() {
+		return data;
 	}
 
-	public void setContent(Object content) {
-		this.content = content;
+	public void setData(Object data) {
+		this.data = data;
 	}
 
 	public String getOxml() {
@@ -24,7 +24,7 @@ public class WordTableCellContent {
 
 	public WordTableCellContent copy() {
 		WordTableCellContent newContent = new WordTableCellContent();
-		newContent.setContent(content);
+		newContent.setData(data);
 		newContent.setOxml(oxml);
 		return newContent;
 	}

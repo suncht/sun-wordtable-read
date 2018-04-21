@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackageRelationship;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFPictureData;
@@ -22,7 +23,7 @@ public class WordTableCellContentImage extends WordTableCellContent {
 	public WordTableCellContentImage(XWPFTableCell cell) {
 		String xml = cell.getCTTc().xmlText();
 		String embedId = extractEmbedId(xml);
-		this.setContent(this.readImage(embedId, cell.getXWPFDocument()));
+		this.setData(this.readImage(embedId, cell.getXWPFDocument()));
 		this.setOxml(cell.getCTTc().xmlText());
 	}
 
@@ -59,8 +60,8 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		}
 		ImageContent imageContent = null;
 		for (XWPFPictureData pictureData : xdoc.getAllPictures()) {
-			PackageRelationship relationship = pictureData.getPackagePart().getRelationship(embedId);
-			if(relationship!=null) {
+			PackageRelationship relationship = pictureData.getPackageRelationship();
+			if (embedId.equals(relationship.getId())) {
 				imageContent = new ImageContent();
 				imageContent.setData(pictureData.getData());
 				imageContent.setFileName(pictureData.getFileName());

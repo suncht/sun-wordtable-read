@@ -1,5 +1,6 @@
 package com.suncht.wordread.parser;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
@@ -7,6 +8,7 @@ import java.util.List;
 
 import org.springframework.util.StringUtils;
 
+import com.google.common.base.Preconditions;
 import com.suncht.wordread.model.WordTable;
 import com.suncht.wordread.parser.mapping.IWordTableMemoryMappingVisitor;
 import com.suncht.wordread.parser.strategy.ITableTransferStrategy;
@@ -44,24 +46,27 @@ public class WordTableParser {
 		return this;
 	}
 
-	public List<WordTable> parse(String wordFilePath) {
+	public List<WordTable> parse(File wordFile) {
+		Preconditions.checkArgument(wordFile.exists(), "文件不存在");
+		
+		String fileName = wordFile.getName();
 		WordDocType docType = WordDocType.DOCX;
-		if (StringUtils.endsWithIgnoreCase(wordFilePath, DOCX_WORD_DOCUMENT)) {
+		if (StringUtils.endsWithIgnoreCase(fileName, DOCX_WORD_DOCUMENT)) {
 			docType = WordDocType.DOCX;
-		} else if (StringUtils.endsWithIgnoreCase(wordFilePath, DOC_WORD_DOCUMENT)) {
+		} else if (StringUtils.endsWithIgnoreCase(fileName, DOC_WORD_DOCUMENT)) {
 			docType = WordDocType.DOC;
 		} else {
 			throw new IllegalArgumentException("不支持该文件类型");
 		}
 
-		try {
-			FileInputStream inputStream = new FileInputStream(wordFilePath);
+		try(FileInputStream inputStream = new FileInputStream(wordFile);) {
 			return this.parse(inputStream, docType);
-		} catch (FileNotFoundException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+	
 
 	public List<WordTable> parse(InputStream inputStream, WordDocType docType) {
 		if (docType == WordDocType.DOCX) {

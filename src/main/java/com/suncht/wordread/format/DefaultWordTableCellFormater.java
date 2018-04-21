@@ -11,7 +11,7 @@ import com.suncht.wordread.model.WordTableSimpleCell;
 public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 	public String format(WordTableCell tableCell) {
 		if (tableCell instanceof WordTableSimpleCell) {
-			return printCell(tableCell.getContent().getContent()) + '\t';
+			return printCell(tableCell.getContent().getData()) + '\t';
 		} else if (tableCell instanceof WordTableComplexCell) {
 			WordTableComplexCell cell = (WordTableComplexCell) tableCell;
 
@@ -20,7 +20,7 @@ public class DefaultWordTableCellFormater implements IWordTableCellFormater {
 			List<WordTableRow> rows = cell.getInnerTable().getRows();
 			for (WordTableRow row : rows) {
 				for (WordTableCell wtcell : row.getCells()) {
-					builder.append(printCell(wtcell.getContent().getContent()) + '\t');
+					builder.append(printCell(wtcell.getContent().getData()) + '\t');
 				}
 			}
 			return builder.toString() + "" + '\t';

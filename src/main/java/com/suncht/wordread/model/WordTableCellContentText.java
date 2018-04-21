@@ -4,7 +4,7 @@ import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 
 public class WordTableCellContentText extends WordTableCellContent {
 	public WordTableCellContentText(XWPFTableCell cell) {
-		this.setContent(cell.getText());
+		this.setData(cell.getText());
 		this.setOxml(cell.getCTTc().xmlText());
 	}
 }

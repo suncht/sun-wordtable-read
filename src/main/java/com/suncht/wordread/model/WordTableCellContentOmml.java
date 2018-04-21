@@ -26,14 +26,14 @@ public class WordTableCellContentOmml extends WordTableCellContent {
 
 		String mml = MathmlUtils.convertOMML2MML(omml);
 		String latex = MathmlUtils.convertMML2Latex(mml);
-		this.setContent(latex);
+		this.setData(latex);
 		this.setOxml(xml);
 	}
 
 	@Override
 	public WordTableCellContent copy() {
 		WordTableCellContent newContent = new WordTableCellContentOmml();
-		newContent.setContent(this.content);
+		newContent.setData(this.data);
 		newContent.setOxml(this.oxml);
 		return newContent;
 	}
