@@ -6,15 +6,15 @@ package com.suncht.wordread.model;
 * @author changtan.sun  
 * @date 2018年4月22日
  */
-public abstract class WordTableCellContent {
+public abstract class WordTableCellContent<T> {
 	protected ContentTypeEnum contentType;
-	protected Object data;
+	protected T data;
 
-	public Object getData() {
+	public T getData() {
 		return data;
 	}
 
-	public void setData(Object data) {
+	public void setData(T data) {
 		this.data = data;
 	}
 	
@@ -30,5 +30,5 @@ public abstract class WordTableCellContent {
 	 * 拷贝对象，具体实现由子类实现
 	 * @return
 	 */
-	public abstract WordTableCellContent copy();
+	public abstract WordTableCellContent<T> copy();
 }

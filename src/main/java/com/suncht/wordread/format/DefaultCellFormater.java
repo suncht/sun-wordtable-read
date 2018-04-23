@@ -4,9 +4,9 @@ import com.suncht.wordread.model.ContentTypeEnum;
 import com.suncht.wordread.model.WordTableCellContent;
 import com.suncht.wordread.model.WordTableCellContentFormula;
 import com.suncht.wordread.model.WordTableCellContentImage;
-import com.suncht.wordread.model.WordTableCellContentImage.ImageContent;
+import com.suncht.wordread.model.WordTableCellContentImage.WcImage;
 import com.suncht.wordread.model.WordTableCellContentOleObject;
-import com.suncht.wordread.model.WordTableCellContentOleObject.OleObjectContent;
+import com.suncht.wordread.model.WordTableCellContentOleObject.WcOleObject;
 import com.suncht.wordread.model.WordTableCellContentText;
 
 /**
@@ -35,22 +35,22 @@ public class DefaultCellFormater implements ICellFormater {
 
 
 	public Object formatText(WordTableCellContentText cellContent) {
-		String text = (String) cellContent.getData();
+		String text = cellContent.getData().toString();
 		return text;
 	}
 	
 	public Object formatImage(WordTableCellContentImage cellContent) {
-		ImageContent imageContent = (ImageContent)cellContent.getData();
+		WcImage imageContent = (WcImage)cellContent.getData();
 		return imageContent!=null ? imageContent.getFileName(): "";
 	}
 	
 	public Object formatFormula(WordTableCellContentFormula cellContent) {
-		String formula = (String) cellContent.getData();
+		String formula = cellContent.getData().getLatex();
 		return formula;
 	}
 	
 	private Object formatOleObject(WordTableCellContentOleObject cellContent) {
-		OleObjectContent oleObjectContent = (OleObjectContent)cellContent.getData();
-		return oleObjectContent!=null ? oleObjectContent.getFileName(): "";
+		WcOleObject oleObject = cellContent.getData();
+		return oleObject!=null ? oleObject.getFileName(): "";
 	}
 }

@@ -26,13 +26,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import com.suncht.wordread.model.WordTableCellContentOleObject.WcOleObject;
+
 /**
 * <p>标题: 单元格中嵌套OLE对象</p>  
 * <p>描述: OLE对象，比如：附件</p>  
 * @author changtan.sun  
 * @date 2018年4月22日
  */
-public class WordTableCellContentOleObject extends WordTableCellContent {
+public class WordTableCellContentOleObject extends WordTableCellContent<WcOleObject> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentOleObject.class);
 	
 	public WordTableCellContentOleObject() {
@@ -44,13 +46,13 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 		Document doc = this.buildDocument(xml);
 		String embedId = extractOleObjectEmbedId(doc);
 		
-		OleObjectContent oleObjectContent = this.readOleObject(embedId, cell.getXWPFDocument());
-		this.setData(oleObjectContent);
+		WcOleObject oleObject = this.readOleObject(embedId, cell.getXWPFDocument());
+		this.setData(oleObject);
 		this.setContentType(ContentTypeEnum.OleObject);
 	}
 	
 	@Override
-	public WordTableCellContent copy() {
+	public WordTableCellContent<WcOleObject> copy() {
 		WordTableCellContentOleObject newContent = new WordTableCellContentOleObject();
 		newContent.setData(data);
 		newContent.setContentType(contentType);
@@ -120,18 +122,18 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 	 * @param xdoc
 	 * @return
 	 */
-	private OleObjectContent readOleObject(String embedId, final XWPFDocument xdoc) {
+	private WcOleObject readOleObject(String embedId, final XWPFDocument xdoc) {
 		if (StringUtils.isBlank(embedId)) {
 			return null;
 		}
-		OleObjectContent oleObjectContent = null;
+		WcOleObject oleObject = null;
 		List<POIXMLDocumentPart> parts = xdoc.getRelations();
 		for (POIXMLDocumentPart poixmlDocumentPart : parts) {
 			String id = poixmlDocumentPart.getPackageRelationship().getId();
 			if(embedId.equals(id)) {
 				PackagePart packagePart = poixmlDocumentPart.getPackagePart();
 				
-				oleObjectContent = new OleObjectContent();
+				oleObject = new WcOleObject();
 //				oleObjectContent.setFileName(packagePart.getPartName().getName());
 				
 				//解析Ole对象中的文件
@@ -139,21 +141,21 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 					POIFSFileSystem poifs = new POIFSFileSystem(is);
 					is.close();
 					Ole10Native ole10 = Ole10Native.createFromEmbeddedOleObject(poifs);
-					oleObjectContent.setFileName(FilenameUtils.getName(ole10.getFileName()));
+					oleObject.setFileName(FilenameUtils.getName(ole10.getFileName()));
 					
 					//byte[] data = IOUtils.toByteArray(packagePart.getInputStream());
-					oleObjectContent.setDataSize(ole10.getDataSize());
-					oleObjectContent.setData(ole10.getDataBuffer());
+					oleObject.setDataSize(ole10.getDataSize());
+					oleObject.setData(ole10.getDataBuffer());
 				} catch (Exception e) {
 					logger.error(e.getMessage(), e);
 				}
 			}
 		}
 
-		return oleObjectContent;
+		return oleObject;
 	}
 	
-	public static class OleObjectContent {
+	public static class WcOleObject {
 		private String fileName;
 		private byte[] data;
 		private int dataSize;

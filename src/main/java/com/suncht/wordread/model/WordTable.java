@@ -42,6 +42,7 @@ public class WordTable {
 		for (WordTableRow row : rows) {
 			for (WordTableCell cell : row.getCells()) {
 				tableFormater.format(cell, builder);
+				builder.append('\t');
 			}
 			builder.append(this.newline());
 		}

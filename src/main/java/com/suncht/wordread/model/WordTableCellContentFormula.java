@@ -14,43 +14,36 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
+import com.suncht.wordread.model.WordTableCellContentFormula.WcFormula;
 import com.suncht.wordread.utils.MathmlUtils;
 
 
-public class WordTableCellContentFormula extends WordTableCellContent {
+public class WordTableCellContentFormula extends WordTableCellContent<WcFormula> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentFormula.class);
-	
-	private String oxml;
 	
 	public WordTableCellContentFormula() {
 
 	}
 
-	public String getOxml() {
-		return oxml;
-	}
-
-	protected void setOxml(String oxml) {
-		this.oxml = oxml;
-	}
-
-	
 	public WordTableCellContentFormula(XWPFTableCell cell) {
 		String xml = cell.getCTTc().xmlText();
 		String omml = this.extractOml(xml);
 
 		String mml = MathmlUtils.convertOMML2MML(omml);
 		String latex = MathmlUtils.convertMML2Latex(mml);
-		this.setData(latex);
-		this.setOxml(xml);
+		
+		WcFormula formulaContent = new WcFormula();
+		formulaContent.setMml(mml);
+		formulaContent.setLatex(latex);
+		this.setData(formulaContent);
+		
 		this.setContentType(ContentTypeEnum.Formula);
 	}
 
 	@Override
-	public WordTableCellContent copy() {
+	public WordTableCellContent<WcFormula> copy() {
 		WordTableCellContentFormula newContent = new WordTableCellContentFormula();
 		newContent.setData(this.data);
-		newContent.setOxml(this.oxml);
 		newContent.setContentType(ContentTypeEnum.Formula);
 		return newContent;
 	}
@@ -75,6 +68,23 @@ public class WordTableCellContentFormula extends WordTableCellContent {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static class WcFormula {
+		private String mml;
+		private String latex;
+		public String getMml() {
+			return mml;
+		}
+		public void setMml(String mml) {
+			this.mml = mml;
+		}
+		public String getLatex() {
+			return latex;
+		}
+		public void setLatex(String latex) {
+			this.latex = latex;
+		}
 	}
 
 }

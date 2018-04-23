@@ -21,7 +21,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
-public class WordTableCellContentImage extends WordTableCellContent {
+import com.suncht.wordread.model.WordTableCellContentImage.WcImage;
+
+public class WordTableCellContentImage extends WordTableCellContent<WcImage> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentImage.class);
 	
 	public WordTableCellContentImage() {
@@ -36,7 +38,7 @@ public class WordTableCellContentImage extends WordTableCellContent {
 	}
 	
 	@Override
-	public WordTableCellContent copy() {
+	public WordTableCellContent<WcImage> copy() {
 		WordTableCellContentImage newContent = new WordTableCellContentImage();
 		newContent.setData(data);
 		newContent.setContentType(contentType);
@@ -70,15 +72,15 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		return null;
 	}
 
-	private ImageContent readImage(String embedId, final XWPFDocument xdoc) {
+	private WcImage readImage(String embedId, final XWPFDocument xdoc) {
 		if (StringUtils.isBlank(embedId)) {
 			return null;
 		}
-		ImageContent imageContent = null;
+		WcImage imageContent = null;
 		for (XWPFPictureData pictureData : xdoc.getAllPictures()) {
 			PackageRelationship relationship = pictureData.getPackageRelationship();
 			if (embedId.equals(relationship.getId())) {
-				imageContent = new ImageContent();
+				imageContent = new WcImage();
 				imageContent.setData(pictureData.getData());
 				imageContent.setFileName(pictureData.getFileName());
 				imageContent.setImageType(pictureData.getPictureType());
@@ -96,7 +98,7 @@ public class WordTableCellContentImage extends WordTableCellContent {
 	* @author changtan.sun  
 	* @date 2018年4月22日
 	 */
-	public static class ImageContent {
+	public static class WcImage {
 		private String fileName;
 		private byte[] data;
 		

@@ -3,7 +3,7 @@ package com.suncht.wordread.output;
 import com.suncht.wordread.format.DefaultCellFormater;
 import com.suncht.wordread.format.ICellFormater;
 import com.suncht.wordread.model.WordTableCell;
-import com.suncht.wordread.model.WordTableCellContentImage.ImageContent;
+import com.suncht.wordread.model.WordTableCellContentImage.WcImage;
 import com.suncht.wordread.model.WordTableComplexCell;
 import com.suncht.wordread.model.WordTableSimpleCell;
 
