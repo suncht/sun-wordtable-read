@@ -1,18 +1,18 @@
 package com.suncht.wordread.model;
 
-import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.POIXMLDocument;
 import org.apache.poi.POIXMLDocumentPart;
-import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.PackagePart;
-import org.apache.poi.openxml4j.opc.PackageRelationship;
+import org.apache.poi.poifs.filesystem.Ole10Native;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFTableCell;
 import org.dom4j.Attribute;
@@ -22,9 +22,9 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
-
-import com.sun.xml.internal.txw2.output.StreamSerializer;
 
 /**
 * <p>标题: 单元格中嵌套OLE对象</p>  
@@ -33,7 +33,8 @@ import com.sun.xml.internal.txw2.output.StreamSerializer;
 * @date 2018年4月22日
  */
 public class WordTableCellContentOleObject extends WordTableCellContent {
-
+	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentOleObject.class);
+	
 	public WordTableCellContentOleObject() {
 		
 	}
@@ -81,7 +82,7 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 			Document doc = reader.read(source);
 			return doc;
 		} catch (DocumentException e) {
-			e.printStackTrace();
+			logger.error(e.getMessage(), e);
 		}
 		return null;
 	}
@@ -131,13 +132,20 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 				PackagePart packagePart = poixmlDocumentPart.getPackagePart();
 				
 				oleObjectContent = new OleObjectContent();
-				oleObjectContent.setFileName(packagePart.getPartName().getName());
+//				oleObjectContent.setFileName(packagePart.getPartName().getName());
 				
-				try {
-					byte[] data = IOUtils.toByteArray(packagePart.getInputStream());
-					oleObjectContent.setData(data);
-				} catch (IOException e) {
-					e.printStackTrace();
+				//解析Ole对象中的文件
+				try(InputStream is = packagePart.getInputStream();) {
+					POIFSFileSystem poifs = new POIFSFileSystem(is);
+					is.close();
+					Ole10Native ole10 = Ole10Native.createFromEmbeddedOleObject(poifs);
+					oleObjectContent.setFileName(FilenameUtils.getName(ole10.getFileName()));
+					
+					//byte[] data = IOUtils.toByteArray(packagePart.getInputStream());
+					oleObjectContent.setDataSize(ole10.getDataSize());
+					oleObjectContent.setData(ole10.getDataBuffer());
+				} catch (Exception e) {
+					logger.error(e.getMessage(), e);
 				}
 			}
 		}
@@ -148,7 +156,7 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 	public static class OleObjectContent {
 		private String fileName;
 		private byte[] data;
-
+		private int dataSize;
 		
 		public String getFileName() {
 			return fileName;
@@ -159,11 +167,25 @@ public class WordTableCellContentOleObject extends WordTableCellContent {
 		}
 
 		public byte[] getData() {
-			return data;
+			if (data == null) {
+				return new byte[0];
+			}
+			return Arrays.copyOf(data, data.length);
 		}
 
 		public void setData(byte[] data) {
-			this.data = data;
+			if (data == null) {
+				return;
+			}
+			this.data = Arrays.copyOf(data, data.length);
+		}
+
+		public int getDataSize() {
+			return dataSize;
+		}
+
+		public void setDataSize(int dataSize) {
+			this.dataSize = dataSize;
 		}
 	}
 

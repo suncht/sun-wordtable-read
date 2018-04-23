@@ -17,9 +17,13 @@ import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
 import org.dom4j.tree.DefaultElement;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 public class WordTableCellContentImage extends WordTableCellContent {
+	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentImage.class);
+	
 	public WordTableCellContentImage() {
 		
 	}

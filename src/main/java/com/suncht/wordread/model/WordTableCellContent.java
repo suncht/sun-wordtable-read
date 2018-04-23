@@ -31,16 +31,4 @@ public abstract class WordTableCellContent {
 	 * @return
 	 */
 	public abstract WordTableCellContent copy();
-
-	//	public static WordTableCellContent getCellContent(String oxml, String text) {
-	//		WordTableCellContent content = null;
-	//		if (oxml.contains("<m:oMathPara>") && oxml.contains("</m:oMathPara>")) { //是公式
-	//			content = new WordTableCellContentOmml();
-	//		} else { //一般文本
-	//			content = new WordTableCellContentText();
-	//		}
-	//		content.setText(text);
-	//		content.setOxml(oxml);
-	//		return content;
-	//	}
 }

@@ -10,12 +10,16 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentFactory;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.suncht.wordread.utils.MathmlUtils;
 
-public class WordTableCellContentFormula extends WordTableCellContent {
 
+public class WordTableCellContentFormula extends WordTableCellContent {
+	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentFormula.class);
+	
 	private String oxml;
 	
 	public WordTableCellContentFormula() {
