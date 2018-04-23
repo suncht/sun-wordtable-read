@@ -33,7 +33,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="libs/commons-cli-1.1.jar"/>
-	<classpathentry kind="lib" path="libs/commons-io-1.4.jar"/>
 	<classpathentry kind="lib" path="libs/json-20090211.jar"/>
 	<classpathentry kind="lib" path="libs/juh-3.2.1.jar"/>
 	<classpathentry kind="lib" path="libs/jurt-3.2.1.jar"/>

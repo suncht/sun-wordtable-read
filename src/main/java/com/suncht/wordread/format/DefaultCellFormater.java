@@ -5,6 +5,8 @@ import com.suncht.wordread.model.WordTableCellContent;
 import com.suncht.wordread.model.WordTableCellContentFormula;
 import com.suncht.wordread.model.WordTableCellContentImage;
 import com.suncht.wordread.model.WordTableCellContentImage.ImageContent;
+import com.suncht.wordread.model.WordTableCellContentOleObject;
+import com.suncht.wordread.model.WordTableCellContentOleObject.OleObjectContent;
 import com.suncht.wordread.model.WordTableCellContentText;
 
 /**
@@ -24,9 +26,13 @@ public class DefaultCellFormater implements ICellFormater {
 		} else if(cellContent.getContentType() == ContentTypeEnum.Formula) {
 			WordTableCellContentFormula _cellContent = (WordTableCellContentFormula)cellContent;
 			return this.formatFormula(_cellContent);
+		} else if(cellContent.getContentType() == ContentTypeEnum.OleObject) {
+			WordTableCellContentOleObject _cellContent = (WordTableCellContentOleObject)cellContent;
+			return this.formatOleObject(_cellContent);
 		}
 		return "";
 	}
+
 
 	public Object formatText(WordTableCellContentText cellContent) {
 		String text = (String) cellContent.getData();
@@ -41,5 +47,10 @@ public class DefaultCellFormater implements ICellFormater {
 	public Object formatFormula(WordTableCellContentFormula cellContent) {
 		String formula = (String) cellContent.getData();
 		return formula;
+	}
+	
+	private Object formatOleObject(WordTableCellContentOleObject cellContent) {
+		OleObjectContent oleObjectContent = (OleObjectContent)cellContent.getData();
+		return oleObjectContent!=null ? oleObjectContent.getFileName(): "";
 	}
 }

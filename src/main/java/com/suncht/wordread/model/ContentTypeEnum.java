@@ -17,5 +17,9 @@ public enum ContentTypeEnum {
 	/**
 	 * 公式
 	 */
-	Formula
+	Formula,
+	/**
+	 * OLE对象
+	 */
+	OleObject
 }

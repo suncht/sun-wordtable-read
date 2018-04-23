@@ -85,9 +85,20 @@ public class WordTableCellContentImage extends WordTableCellContent {
 		return imageContent;
 	}
 
+	/**
+	 * 图片内容
+	* <p>标题: ImageContent</p>  
+	* <p>描述: </p>  
+	* @author changtan.sun  
+	* @date 2018年4月22日
+	 */
 	public static class ImageContent {
 		private String fileName;
 		private byte[] data;
+		
+		/**
+		 * 图片类型，参考org.apache.poi.xwpf.usermodel
+		 */
 		private int imageType;
 
 		public String getFileName() {
