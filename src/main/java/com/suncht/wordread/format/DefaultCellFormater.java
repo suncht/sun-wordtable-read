@@ -16,7 +16,7 @@ import com.suncht.wordread.model.WordTableCellContentText;
  */
 public class DefaultCellFormater implements ICellFormater {
 	@Override
-	public Object format(WordTableCellContent cellContent) {
+	public Object format(WordTableCellContent<?> cellContent) {
 		if(cellContent.getContentType() == ContentTypeEnum.Text) {
 			WordTableCellContentText _cellContent = (WordTableCellContentText)cellContent;
 			return this.formatText(_cellContent);

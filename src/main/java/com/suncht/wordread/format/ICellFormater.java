@@ -8,6 +8,6 @@ import com.suncht.wordread.model.WordTableCellContent;
  *
  */
 public interface ICellFormater {
-	public Object format(WordTableCellContent cellContent);
+	public Object format(WordTableCellContent<?> cellContent);
 	
 }
