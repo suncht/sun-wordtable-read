@@ -16,9 +16,18 @@ import com.suncht.wordread.parser.WordTableTransferContext;
 import com.suncht.wordread.parser.mapping.WordTableMemoryMapping;
 
 /**
- * 解析Docx中一张复杂表格内容
+ * 
  * @author changtan.sun
  *
+ */
+
+/**
+* 解析Docx中一张复杂表格内容
+* Docx不仅有列合并，而且有行合并，没有列宽
+* <p>标题: SingleWordXTableParser</p>  
+* <p>描述: </p>  
+* @author changtan.sun  
+* @date 2018年4月27日
  */
 public class SingleWordXTableParser implements ISingleWordTableParser {
 	private XWPFTable xwpfTable;
@@ -48,12 +57,23 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 		int realMaxRowCount = rows.size();
 		//		table.setRealMaxRowCount(rows.size());
 
+		//计算最大列数
 		int realMaxColumnCount = 0;
 		for (XWPFTableRow row : rows) {
 			//获取行对应的单元格  
 			cells = row.getTableCells();
-			if (cells.size() > realMaxColumnCount) {
-				realMaxColumnCount = cells.size();
+			int _columnCountOnRow = 0;
+			for (XWPFTableCell cell : cells) {
+				CTTcPr tt = cell.getCTTc().getTcPr();
+				if(tt.getGridSpan()!=null) {
+					_columnCountOnRow += tt.getGridSpan().getVal().intValue();
+				} else {
+					_columnCountOnRow += 1;
+				}
+			}
+			
+			if (_columnCountOnRow > realMaxColumnCount) {
+				realMaxColumnCount = _columnCountOnRow;
 			}
 		}
 
@@ -124,6 +144,7 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				ttc.setType(TTCPrEnum.VM_S);
 				ttc.setRealRowIndex(realRowIndex);
 				ttc.setRealColumnIndex(realColumnIndex);
+				ttc.setWidth(tt.getTcW().getW());
 				ttc.setRoot(null);
 				//ttc.setText(cell.getText());
 				ttc.setContent(WordTableCellContents.getCellContent(cell));
@@ -138,6 +159,10 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 						_end = i;
 						root = _tableMemoryMapping.getTTCPr(_end, realColumnIndex);
 						break;
+					} else if(ttcpr != null && ttcpr.getRoot()!=null) {
+						_end = i;
+						root = ttcpr.getRoot();
+						break;
 					}
 				}
 
@@ -145,9 +170,10 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				ttc.setType(TTCPrEnum.VM);
 				ttc.setRealRowIndex(realRowIndex);
 				ttc.setRealColumnIndex(realColumnIndex);
+				ttc.setWidth(tt.getTcW().getW());
 				ttc.setRoot(root);
-				_tableMemoryMapping.setTTCPr(ttc, realRowIndex, realColumnIndex);
 				root.setRowSpan(_start - _end + 1);
+				_tableMemoryMapping.setTTCPr(ttc, realRowIndex, realColumnIndex);
 			}
 		} else { //没有进行行合并的单元格
 			TTCPr currentCell = _tableMemoryMapping.getTTCPr(realRowIndex, realColumnIndex);
@@ -158,9 +184,9 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 				currentCell.setType(TTCPrEnum.NONE);
 				currentCell.setRealRowIndex(realRowIndex);
 				currentCell.setRealColumnIndex(realColumnIndex);
+				currentCell.setWidth(tt.getTcW().getW());
 				currentCell.setContent(WordTableCellContents.getCellContent(cell));
 				currentCell.setRoot(null);
-
 				//判断是否有父单元格
 				if (realRowIndex > 0) {
 					TTCPr parent = _tableMemoryMapping.getTTCPr(realRowIndex - 1, realColumnIndex);
@@ -187,8 +213,10 @@ public class SingleWordXTableParser implements ISingleWordTableParser {
 			//给其他被列合并的单元格进行初始化
 			for (int i = 1; i < colSpan; i++) {
 				TTCPr cell_other = _tableMemoryMapping.getTTCPr(realRowIndex, realColumnIndex + i);
-				if (cell_other == null)
+				if (cell_other == null){
 					cell_other = new TTCPr();
+					cell_other.setWidth(tt.getTcW().getW());
+				}
 				cell_other.setRealRowIndex(realRowIndex);
 				cell_other.setRealColumnIndex(realColumnIndex + i);
 				cell_other.setType(TTCPrEnum.HM);

@@ -1,6 +1,7 @@
 package com.suncht.wordread.model;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 
 import com.suncht.wordread.parser.mapping.IWordTableMemoryMappingVisitor;
 
@@ -38,7 +39,12 @@ public class TTCPr implements Serializable, Cloneable {
 	/**
 	 * 单元格的数据内容
 	 */
-	private WordTableCellContent content;
+	private WordTableCellContent<?> content;
+	
+	/**
+	 * 单元格的宽度
+	 */
+	private BigInteger width;
 	/**
 	 * 合并了多少行
 	 */
@@ -157,6 +163,14 @@ public class TTCPr implements Serializable, Cloneable {
 
 	public void setParent(TTCPr parent) {
 		this.parent = parent;
+	}
+
+	public BigInteger getWidth() {
+		return width;
+	}
+
+	public void setWidth(BigInteger width) {
+		this.width = width;
 	}
 
 	@Override

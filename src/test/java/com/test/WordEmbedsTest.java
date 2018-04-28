@@ -10,6 +10,8 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.openxml4j.exceptions.OpenXML4JException;
 import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.poifs.dev.POIFSViewEngine;
+import org.apache.poi.poifs.filesystem.POIFSFileSystem;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.junit.Test;
@@ -19,7 +21,8 @@ public class WordEmbedsTest {
 	public void listAllEmbeds() {
 		try (InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/嵌套附件01.docx");) {
 			XWPFDocument document = new XWPFDocument(inputStream);
-			listEmbeds2(document);
+			listEmbeds(document);
+			//listEmbeds2(document);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,6 +76,19 @@ public class WordEmbedsTest {
 					}
 				}
 			}
+		}
+	}
+	
+	
+	@Test
+	public void viewFile() {
+		POIFSFileSystem fs = null;
+		List strings = POIFSViewEngine.inspectViewable(fs, true, 0, "  ");
+		Iterator iter = strings.iterator();
+
+		while (iter.hasNext()) {
+			//os.write( ((String)iter.next()).getBytes());
+			System.out.println(iter.next());
 		}
 	}
 }

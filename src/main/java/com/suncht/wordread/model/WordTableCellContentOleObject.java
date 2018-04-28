@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.POIXMLDocumentPart;
 import org.apache.poi.openxml4j.opc.PackagePart;
+import org.apache.poi.poifs.dev.POIFSViewEngine;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DirectoryNode;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
@@ -207,6 +209,13 @@ public class WordTableCellContentOleObject extends WordTableCellContent<WcOleObj
 			return null;
 		}
 		
+		List strings = POIFSViewEngine.inspectViewable(poifs, true, 0, "  ");
+		Iterator iter = strings.iterator();
+
+		while (iter.hasNext()) {
+			//os.write( ((String)iter.next()).getBytes());
+			System.out.println(iter.next());
+		}
 		throw new NotImplementedException("暂未实现");
 		
 		

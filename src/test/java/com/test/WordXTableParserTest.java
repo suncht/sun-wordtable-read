@@ -48,4 +48,15 @@ public class WordXTableParserTest {
 			System.out.println(wordTable.format());
 		}
 	}
+	
+	@Test
+	public void test04() {
+		InputStream inputStream = WordXTableParserTest.class.getResourceAsStream("/复杂表格.docx");
+		// InputStream inputStream = new FileInputStream(new File(doc2));
+		List<WordTable> tables = WordTableParser.create().transferStrategy(new LogicalTableStrategy())
+				.parse(inputStream, WordDocType.DOCX);
+		for (WordTable wordTable : tables) {
+			System.out.println(wordTable.format());
+		}
+	}
 }
