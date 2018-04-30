@@ -24,6 +24,16 @@ public class TTCPr implements Serializable, Cloneable {
 	 * 在word中实际列号
 	 */
 	private int realColumnIndex;
+	
+	/**
+	 * 逻辑行号
+	 */
+	private int logicRowIndex;
+	
+	/**
+	 * 逻辑列号
+	 */
+	private int logicColumnIndex;
 	/**
 	 * 根单元格（如果是被合并的单元格(包括行合并、列合并)， 则指向合并开始的单元格）
 	 *  * 例子：
@@ -48,11 +58,11 @@ public class TTCPr implements Serializable, Cloneable {
 	/**
 	 * 合并了多少行
 	 */
-	private int rowSpan = 1;
+	private int rowSpan = 0;
 	/**
 	 * 合并了多少列
 	 */
-	private int colSpan = 1;
+	private int colSpan = 0;
 
 	/**
 	 * 父单元格，当列合并时有效
@@ -64,7 +74,7 @@ public class TTCPr implements Serializable, Cloneable {
 	 	|-------|-----------------------------	|
 	 	说明：“局部影响”所在单元格的父单元格parent是“故障影响”所在单元格
 	 */
-	private TTCPr parent;
+	//private TTCPr parent;
 
 	/**
 	 * 是否有效单元格。 被合并的单元格不属于有效单元格
@@ -121,6 +131,22 @@ public class TTCPr implements Serializable, Cloneable {
 	public void setRealColumnIndex(int realColumnIndex) {
 		this.realColumnIndex = realColumnIndex;
 	}
+	
+	public int getLogicRowIndex() {
+		return logicRowIndex;
+	}
+
+	public void setLogicRowIndex(int logicRowIndex) {
+		this.logicRowIndex = logicRowIndex;
+	}
+
+	public int getLogicColumnIndex() {
+		return logicColumnIndex;
+	}
+
+	public void setLogicColumnIndex(int logicColumnIndex) {
+		this.logicColumnIndex = logicColumnIndex;
+	}
 
 	public int getRowSpan() {
 		return rowSpan;
@@ -138,14 +164,14 @@ public class TTCPr implements Serializable, Cloneable {
 		this.colSpan = colSpan;
 	}
 
-	public WordTableCellContent getContent() {
+	public WordTableCellContent<?> getContent() {
 		if (root != null) {
 			return root.getContent();
 		}
 		return content;
 	}
 
-	public void setContent(WordTableCellContent content) {
+	public void setContent(WordTableCellContent<?> content) {
 		this.content = content;
 	}
 
@@ -157,13 +183,13 @@ public class TTCPr implements Serializable, Cloneable {
 		this.root = root;
 	}
 
-	public TTCPr getParent() {
-		return parent;
-	}
-
-	public void setParent(TTCPr parent) {
-		this.parent = parent;
-	}
+//	public TTCPr getParent() {
+//		return parent;
+//	}
+//
+//	public void setParent(TTCPr parent) {
+//		this.parent = parent;
+//	}
 
 	public BigInteger getWidth() {
 		return width;
@@ -175,12 +201,8 @@ public class TTCPr implements Serializable, Cloneable {
 
 	@Override
 	public String toString() {
-		if (root != null && parent == null) {
-			return "TTCPr [content=" + content.getData() + ", root=" + root + "]";
-		} else if (root == null && parent != null) {
-			return "TTCPr [content=" + content.getData() + ", parent=" + parent + "]";
-		} else if (root != null && parent != null) {
-			return "TTCPr [content=" + content.getData() + ", root=" + root + ", parent=" + parent + "]";
+		if (root != null) {
+			return "TTCPr [root=" + root + "]";
 		}
 		return "TTCPr [content=" + content.getData() + "]";
 	}

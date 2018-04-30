@@ -70,28 +70,20 @@ public class LogicalTableStrategy implements ITableTransferStrategy {
 			return null;
 		}
 
-		int real_row_index = _first_column_in_row.getRealRowIndex();
+		int _logic_row_index = _first_column_in_row.getLogicRowIndex();
 		//int _end_row_index = _first_column_in_row.getRowSpan() + _first_column_in_row.getRealRowIndex() - 1;
 		int _row_span = _first_column_in_row.getRowSpan();
-		int _real_column_count = _rows.length;
+		int _logic_column_count = _rows.length;
 
 		WordTableRow pwtr = new WordTableRow();
 
 		WordTableCell cell = null;
-		//		WordTableCell pwtc = null;
-		for (int i = 0; i < _real_column_count; i++) {
-			cell = getCellInRow(real_row_index, _row_span, i, currentRowIndex);
+		for (int i = 0; i < _logic_column_count; i++) {
+			cell = getCellInRow(_logic_row_index, _row_span, i, currentRowIndex);
 			if (cell == null) {
 				continue;
 			}
 			pwtr.getCells().add(cell);
-			//			if (cells.size() == 1) {
-			//				pwtr.getCells().add(cells.get(0));
-			//			} else {
-			//				pwtc = new WordTableCell();
-			//				pwtc.getSubCells().addAll(cells);
-			//				pwtr.getCells().add(pwtc);
-			//			}
 		}
 
 		return pwtr;
@@ -99,24 +91,24 @@ public class LogicalTableStrategy implements ITableTransferStrategy {
 
 	/**
 	 * 获取一行中的单元格集合,将实际单元格转换成逻辑单元格
-	 * @param realRowIndex word中的实际开始行号
-	 * @param endRealRowIndex word中的实际结束行号
-	 * @param realColumnIndex  word中的实际列
+	 * @param logicRowIndex 逻辑行号
+	 * @param endRealRowIndex 逻辑行号
+	 * @param logicColumnIndex  word中的实际列
 	 * @param currentRowIndex  在表格映射对象中的行号
 	 * @return
 	 */
-	private WordTableCell getCellInRow(int realRowIndex, int realRowSpan, int realColumnIndex, int currentRowIndex) {
+	private WordTableCell getCellInRow(int logicRowIndex, int logicRowSpan, int logicColumnIndex, int currentRowIndex) {
 		WordTableCell cell = null;
-		TTCPr currentRealCell = tableMemoryMapping.getTTCPr(realRowIndex, realColumnIndex);
+		TTCPr currentRealCell = tableMemoryMapping.getTTCPr(logicRowIndex, logicColumnIndex);
 
-		boolean needHandleRowSpan = realRowSpan > 1 || currentRealCell.isDoneRowSpan(); //是否需要处理跨行的情况
+		boolean needHandleRowSpan = logicRowSpan > 0 || currentRealCell.isDoneRowSpan(); //是否需要处理跨行的情况
 		boolean needHandleColSpan = currentRealCell.isDoneColSpan();//是否需要处理跨列的情况
 
 		boolean satisfyConditionOfComplexCell = false; //是否满足复杂单元格的条件
 
 		satisfyConditionOfComplexCell = needHandleRowSpan && needHandleColSpan;
 		if (!satisfyConditionOfComplexCell) {
-			satisfyConditionOfComplexCell = currentRealCell.getRowSpan() < realRowSpan;
+			satisfyConditionOfComplexCell = currentRealCell.getRowSpan() < logicRowSpan;
 		}
 
 		if (currentRealCell.isValid()) { //有效单元格
@@ -125,11 +117,11 @@ public class LogicalTableStrategy implements ITableTransferStrategy {
 
 				WordTable innerTable = new WordTable();
 				int _realColSpan = currentRealCell.getColSpan();
-				for (int i = 0; i < realRowSpan;) {
+				for (int i = 0; i < logicRowSpan;) {
 					WordTableRow innerRow = new WordTableRow();
 					int _rowSpan = 1;
 					for (int j = 0; j < _realColSpan; j++) {
-						TTCPr _ttcpr = tableMemoryMapping.getTTCPr(realRowIndex + i, realColumnIndex + j);
+						TTCPr _ttcpr = tableMemoryMapping.getTTCPr(logicRowIndex + i, logicColumnIndex + j);
 						if (_ttcpr.isValid()) {
 							WordTableCell _cell = new WordTableSimpleCell();
 							_cell.setRowSpan(_ttcpr.getRowSpan());

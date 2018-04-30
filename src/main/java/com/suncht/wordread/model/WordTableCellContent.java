@@ -1,5 +1,7 @@
 package com.suncht.wordread.model;
 
+import com.suncht.wordread.parser.WordTableParser.WordDocType;
+
 /**
 * <p>标题: 单元格内容对象</p>  
 * <p>描述: </p>  
@@ -7,6 +9,8 @@ package com.suncht.wordread.model;
 * @date 2018年4月22日
  */
 public abstract class WordTableCellContent<T> {
+	protected WordDocType docType;
+	
 	protected ContentTypeEnum contentType;
 	protected T data;
 
@@ -31,4 +35,6 @@ public abstract class WordTableCellContent<T> {
 	 * @return
 	 */
 	public abstract WordTableCellContent<T> copy();
+	
+	public abstract void load(Object cellObj);
 }

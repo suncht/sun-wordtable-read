@@ -22,24 +22,33 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.suncht.wordread.model.WordTableCellContentImage.WcImage;
+import com.suncht.wordread.parser.WordTableParser.WordDocType;
 
 public class WordTableCellContentImage extends WordTableCellContent<WcImage> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentImage.class);
 	
-	public WordTableCellContentImage() {
-		
-	}
-	
-	public WordTableCellContentImage(XWPFTableCell cell) {
-		String xml = cell.getCTTc().xmlText();
-		String embedId = extractEmbedId(xml);
-		this.setData(this.readImage(embedId, cell.getXWPFDocument()));
-		this.setContentType(ContentTypeEnum.Image);
+	public WordTableCellContentImage(WordDocType docType) {
+		this.docType = docType;
 	}
 	
 	@Override
+	public void load(Object cellObj) {
+		this.setContentType(ContentTypeEnum.Image);
+		
+		if(docType == WordDocType.DOCX) {
+			XWPFTableCell cell = (XWPFTableCell) cellObj;
+			String xml = cell.getCTTc().xmlText();
+			String embedId = extractEmbedId(xml);
+			this.setData(this.readImage(embedId, cell.getXWPFDocument()));
+		} else if(docType == WordDocType.DOC) {
+			
+		}
+	}
+	
+	
+	@Override
 	public WordTableCellContent<WcImage> copy() {
-		WordTableCellContentImage newContent = new WordTableCellContentImage();
+		WordTableCellContentImage newContent = new WordTableCellContentImage(this.docType);
 		newContent.setData(data);
 		newContent.setContentType(contentType);
 		return newContent;
@@ -138,5 +147,6 @@ public class WordTableCellContentImage extends WordTableCellContent<WcImage> {
 		}
 
 	}
+
 
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.POIXMLDocumentPart;
+import org.apache.poi.hwpf.usermodel.TableCell;
 import org.apache.poi.openxml4j.opc.PackagePart;
 import org.apache.poi.poifs.dev.POIFSViewEngine;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
@@ -35,6 +36,7 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.suncht.wordread.model.WordTableCellContentOleObject.WcOleObject;
+import com.suncht.wordread.parser.WordTableParser.WordDocType;
 
 /**
  * <p>
@@ -50,23 +52,30 @@ import com.suncht.wordread.model.WordTableCellContentOleObject.WcOleObject;
 public class WordTableCellContentOleObject extends WordTableCellContent<WcOleObject> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentOleObject.class);
 
-	public WordTableCellContentOleObject() {
-
+	public WordTableCellContentOleObject(WordDocType docType) {
+		this.docType = docType;
 	}
-
-	public WordTableCellContentOleObject(XWPFTableCell cell) {
-		String xml = cell.getCTTc().xmlText();
-		Document doc = this.buildDocument(xml);
-		String embedId = extractOleObjectEmbedId(doc);
-
-		WcOleObject oleObject = this.readOleObject(embedId, cell.getXWPFDocument());
-		this.setData(oleObject);
+	
+	@Override
+	public void load(Object cellObj) {
 		this.setContentType(ContentTypeEnum.OleObject);
+		
+		if(docType == WordDocType.DOCX) {
+			XWPFTableCell cell = (XWPFTableCell) cellObj;
+			String xml = cell.getCTTc().xmlText();
+			Document doc = this.buildDocument(xml);
+			String embedId = extractOleObjectEmbedId(doc);
+
+			WcOleObject oleObject = this.readOleObject(embedId, cell.getXWPFDocument());
+			this.setData(oleObject);		
+		} else if(docType == WordDocType.DOC) {
+			
+		}
 	}
 
 	@Override
 	public WordTableCellContent<WcOleObject> copy() {
-		WordTableCellContentOleObject newContent = new WordTableCellContentOleObject();
+		WordTableCellContentOleObject newContent = new WordTableCellContentOleObject(this.docType);
 		newContent.setData(data);
 		newContent.setContentType(contentType);
 		return newContent;

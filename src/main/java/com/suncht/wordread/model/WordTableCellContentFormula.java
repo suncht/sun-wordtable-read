@@ -15,34 +15,44 @@ import org.slf4j.LoggerFactory;
 import org.xml.sax.InputSource;
 
 import com.suncht.wordread.model.WordTableCellContentFormula.WcFormula;
+import com.suncht.wordread.parser.WordTableParser.WordDocType;
 import com.suncht.wordread.utils.MathmlUtils;
 
 
 public class WordTableCellContentFormula extends WordTableCellContent<WcFormula> {
 	private final static Logger logger = LoggerFactory.getLogger(WordTableCellContentFormula.class);
 	
-	public WordTableCellContentFormula() {
-
+	public WordTableCellContentFormula(WordDocType docType) {
+		this.docType = docType;
 	}
-
-	public WordTableCellContentFormula(XWPFTableCell cell) {
-		String xml = cell.getCTTc().xmlText();
-		String omml = this.extractOml(xml);
-
-		String mml = MathmlUtils.convertOMML2MML(omml);
-		String latex = MathmlUtils.convertMML2Latex(mml);
-		
-		WcFormula formulaContent = new WcFormula();
-		formulaContent.setMml(mml);
-		formulaContent.setLatex(latex);
-		this.setData(formulaContent);
-		
+	
+	@Override
+	public void load(Object cellObj) {
 		this.setContentType(ContentTypeEnum.Formula);
+		
+		if(docType == WordDocType.DOCX) {
+			XWPFTableCell cell = (XWPFTableCell) cellObj;
+			
+			String xml = cell.getCTTc().xmlText();
+			String omml = this.extractOml(xml);
+
+			String mml = MathmlUtils.convertOMML2MML(omml);
+			String latex = MathmlUtils.convertMML2Latex(mml);
+			
+			WcFormula formulaContent = new WcFormula();
+			formulaContent.setMml(mml);
+			formulaContent.setLatex(latex);
+			this.setData(formulaContent);
+		} else if(docType == WordDocType.DOC) {
+			
+		}
+		
 	}
+
 
 	@Override
 	public WordTableCellContent<WcFormula> copy() {
-		WordTableCellContentFormula newContent = new WordTableCellContentFormula();
+		WordTableCellContentFormula newContent = new WordTableCellContentFormula(this.docType);
 		newContent.setData(this.data);
 		newContent.setContentType(ContentTypeEnum.Formula);
 		return newContent;
@@ -86,5 +96,6 @@ public class WordTableCellContentFormula extends WordTableCellContent<WcFormula>
 			this.latex = latex;
 		}
 	}
+
 
 }
